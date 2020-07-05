@@ -1,0 +1,1 @@
+web: sh setup.sh && streamlit run 009_streamlit_with_scikit-learn.py

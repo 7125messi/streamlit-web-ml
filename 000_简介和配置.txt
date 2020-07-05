@@ -1,0 +1,279 @@
+# Steamlit
+
+```shell
+(streamlit) [parallels@centos-7 ~]$ streamlit hello
+
+  👋 Welcome to Streamlit!
+
+  If you're one of our development partners or you're interested in getting
+  personal technical support or Streamlit updates, please enter your email
+  address below. Otherwise, you may leave the field blank.
+
+  Email: zydeve@163.com
+
+  Privacy Policy:
+  As an open source project, we collect usage statistics. We cannot see and do
+  not store information contained in Streamlit apps. You can find out more by
+  reading our privacy policy at: https://streamlit.io/privacy-policy
+
+  If you'd like to opt out of usage statistics, add the following to
+  ~/.streamlit/config.toml, creating that file if necessary:
+
+    [browser]
+    gatherUsageStats = false
+
+
+  Welcome to Streamlit. Check out our demo in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.211.55.11:8501
+
+  Ready to create your own Python apps super quickly?
+  Just head over to https://docs.streamlit.io
+
+  May you create awesome apps!
+
+```
+
+
+```shell
+(streamlit) [parallels@centos-7 streamlit_web]$ streamlit 
+Usage: streamlit [OPTIONS] COMMAND [ARGS]...
+
+  Try out a demo with:
+
+      $ streamlit hello
+
+  Or use the line below to run your own script:
+
+      $ streamlit run your_script.py
+
+Options:
+  --log_level [error|warning|info|debug]
+  --version                       Show the version and exit.
+  --help                          Show this message and exit.
+
+Commands:
+  activate  Activate Streamlit by entering your email.
+  cache     Manage the Streamlit cache.
+  config    Manage Streamlit's config settings.
+  docs      Show help in browser.
+  hello     Runs the Hello World script.
+  help      Print this help message.
+  run       Run a Python script, piping stderr to Streamlit.
+  version   Print Streamlit's version number.
+```
+Streamlit应用程序是自上而下运行的Python脚本；每次用户打开指向应用程序的浏览器选项卡时，都会重新执行脚本；当脚本执行时，Streamlit在浏览器中实时绘制其输出。为了避免重复计算，python脚本使用缓存来避免重新计算昂贵的函数，因此更新速度非常快。每次用户与小部件交互时，都会重新执行脚本，并在运行期间将该小部件的输出值设置为新值。可以这么理解，**运行web app时，每当你改变了网页中某个控件的值之后，就会从头到尾的再执行一遍python脚本。**<br />**<br />**
+
+
+# 1 运行Streamlit应用
+```shell
+# 运行您的应用程序。您可以随时使用Ctrl + c终止服务器。
+# 在传递脚本时，一些自定义参数必须在两个破折号后传递。否则，参数将被解释为Streamlit本身的参数。
+streamlit run your_script.py [-- script args]
+```
+
+# 2 .streamlit/config.toml 配置文件
+```
+If you want to permanently set certain config options, just add them to $CWD/.streamlit/config.toml or to a global ~/.streamlit/config.toml (in Windows this would be %userprofile%/.streamlit/config.toml). More info below.
+```
+
+# 3 查看所有配置选项
+(base) C:\Users\zhaoyadong\.streamlit>streamlit config show
+# Below are all the sections and options you can have in ~/.streamlit/config.toml.生成一个配置文件
+
+[global]
+
+# By default, Streamlit checks if the Python watchdog module is available and, if not, prints a warning asking for you to install it. The watchdog module is not required, but highly recommended. It improves Streamlit's ability to detect changes to files in your filesystem.
+# If you'd like to turn off this warning, set this to True.
+# Default: false
+disableWatchdogWarning = false
+
+# Configure the ability to share apps to the cloud.
+# Should be set to one of these values: - "off" : turn off sharing. - "s3" : share to S3, based on the settings under the [s3] section of this config file. - "file" : share to a directory on the local machine. This is meaningful only for debugging Streamlit itself, and shouldn't be used for production.
+# Default: "off"
+sharingMode = "off"
+
+# If True, will show a warning when you run a Streamlit-enabled script via "python my_script.py".
+# Default: true
+showWarningOnDirectExecution = true
+
+# Level of logging: 'error', 'warning', 'info', or 'debug'.
+# Default: 'info'
+logLevel = "info"
+
+
+[client]
+
+# Whether to enable st.cache.
+# Default: true
+caching = true
+
+# If false, makes your Streamlit script not draw to a Streamlit app.
+# Default: true
+displayEnabled = true
+
+
+[runner]
+
+# Allows you to type a variable or string by itself in a single line of Python code to write it to the app.
+# Default: true
+magicEnabled = true
+
+# Install a Python tracer to allow you to stop or pause your script at any point and introspect it. As a side-effect, this slows down your script's 
+execution.
+# Default: false
+installTracer = false
+
+# Sets the MPLBACKEND environment variable to Agg inside Streamlit to prevent Python crashing.
+# Default: true
+fixMatplotlib = true
+
+
+[server]
+
+# List of folders that should not be watched for changes. This impacts both "Run on Save" and @st.cache.
+# Relative paths will be taken as relative to the current working directory.
+# Example: ['/home/user1/env', 'relative/path/to/folder']
+# Default: []
+folderWatchBlacklist = []
+
+# Change the type of file watcher used by Streamlit, or turn it off completely.
+# Allowed values: * "auto" : Streamlit will attempt to use the watchdog module, and falls back to polling if watchdog is not available. * "watchdog" : Force Streamlit to use the watchdog module. * "poll" : Force Streamlit to always use polling. * "none" : Streamlit will not watch files.
+# Default: "auto"
+fileWatcherType = "auto"
+
+# Symmetric key used to produce signed cookies. If deploying on multiple replicas, this should be set to the same value across all replicas to ensure they all share the same secret.
+# Default: randomly generated secret key.
+cookieSecret = "fd2b131a0ecf1e453203add235fbe549e29e072ff800a8d79b8b3fbe9fa828dd"
+
+# If false, will attempt to open a browser window on start.
+# Default: false unless (1) we are on a Linux box where DISPLAY is unset, or (2) server.liveSave is set.
+headless = false
+
+# Immediately share the app in such a way that enables live monitoring, and post-run analysis.
+# Default: false
+liveSave = false
+
+# Automatically rerun script when the file is modified on disk.
+# Default: false
+runOnSave = false
+
+# The address where the server will listen for client and browser connections. Use this if you want to bind the server to a specific address. If set, the server will only be accessible from this address, and not from any aliases (like localhost).
+# Default: (unset)
+#address =
+
+# The port where the server will listen for browser connections.
+# Default: 8501
+port = 8501
+
+# The base path for the URL where Streamlit should be served from.
+# Default: ""
+baseUrlPath = ""
+
+# Enables support for Cross-Origin Request Sharing (CORS) protection, for added security.
+# Default: true
+enableCORS = true
+
+# Enables support for Cross-Site Request Forgery (XSRF) protection, for added security.
+# Default: true
+enableXsrfProtection = true
+
+# Max size, in megabytes, for files uploaded with the file_uploader.
+# Default: 200
+maxUploadSize = 200
+
+# Enables support for websocket compression.
+# Default: true
+enableWebsocketCompression = true
+
+
+[browser]
+
+# Internet address where users should point their browsers in order to connect to the app. Can be IP address or DNS name and path.
+# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser - Tell the browser where to connect to the server when in liveSave mode.
+# Default: 'localhost'
+serverAddress = "localhost"
+
+# Whether to send usage statistics to Streamlit.
+# Default: true
+gatherUsageStats = true
+
+# Port where users should point their browsers in order to connect to the app.
+# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser - Tell the browser where to connect to the server when in liveSave mode.
+# Default: whatever value is set in server.port.
+serverPort = 8501
+
+
+[mapbox]
+
+# Configure Streamlit to use a custom Mapbox token for elements like st.deck_gl_chart and st.map. To get a token for yourself, create an account at 
+https://mapbox.com. It's free (for moderate usage levels)!
+# Default: ""
+token = ""
+
+
+[s3]
+
+# Name of the AWS S3 bucket to save apps.
+# Default: (unset)
+#bucket =
+
+# URL root for external view of Streamlit apps.
+# Default: (unset)
+#url =
+
+# Access key to write to the S3 bucket.
+# Leave unset if you want to use an AWS profile.
+# Default: (unset)
+#accessKeyId =
+
+# Secret access key to write to the S3 bucket.
+# Leave unset if you want to use an AWS profile.
+# Default: (unset)
+#secretAccessKey =
+
+# The "subdirectory" within the S3 bucket where to save apps.
+# S3 calls paths "keys" which is why the keyPrefix is like a subdirectory. Use "" to mean the root directory.
+# Default: ""
+keyPrefix = ""
+
+# AWS region where the bucket is located, e.g. "us-west-2".
+# Default: (unset)
+#region =
+
+# AWS credentials profile to use.
+# Leave unset to use your default profile.
+# Default: (unset)
+#profile =
+
+
+
+在的全局配置文件中~/.streamlit/config.toml。例如：
+[server]
+port = 80
+
+
+在每个项目的配置文件中$CWD/.streamlit/config.toml，该位置 $CWD是您运行Streamlit的文件夹。
+
+
+通过STREAMLIT_*环境变量，例如：
+$ export STREAMLIT_SERVER_PORT=80
+
+
+在运行时作为命令行中的标志。例如：streamlit run
+$ streamlit run your_script.py --server.port 80
+
+
+# 清除缓存
+$ streamlit cache clear
+从Streamlit缓存中清除持久文件（如果有）。
+@st.cache(persist=true) 落到本地磁盘才有
+
+
+# 查看文件
+$ streamlit docs
+
+# 打印Streamlit的版本
+$ streamlit --version
+显示当前Python环境中Streamlit的版本。

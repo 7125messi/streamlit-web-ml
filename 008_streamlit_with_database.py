@@ -43,7 +43,7 @@ st.write('''
         * Python的id功能：适合单例对象，例如打开的数据库连接或TensorFlow会话。这些对象将只实例化一次，无论脚本重新运行多少次。
 
 
-    # 示例1：传递数据库连接
+    * 示例1：传递数据库连接
 
     假设我们要打开一个数据库连接，该连接可以在Streamlit应用程序的多次运行中重用。为此，您可以利用以下事实：通过引用存储缓存的对象以自动初始化和重用连接
     ```python
@@ -68,6 +68,7 @@ st.write('''
     只要您拥有指向外部资源的对象（例如数据库连接或Tensorflow会话），这些设计模式就会应用。
 ''')
 import pymysql
+import pandas as pd
 
 @st.cache(allow_output_mutation=True)
 def get_database_connection():
@@ -76,22 +77,38 @@ def get_database_connection():
     :return: mysql connection
     """
     st.write('我被缓存命中了')
-    return pymysql.connect(
-        host = '192.168.1.2',
+    conn = pymysql.connect(
+        host = '10.239.343.80',
         port = 3306,
-        user = 'root',
-        password = 'ydzhao',
-        database = 'python_mysql',
+        user = 'xxx',
+        password = '123456',
+        database = 'xxx',
         charset = 'utf8'
     )
+    return conn
 
-@st.cache(hash_funcs={get_database_connection:id})
-def query_data(sqlStr):
-    df = get_database_connection().cursor().execute(sqlStr)
-    return df
-         
+# conn = pymysql.connect(
+#     host = '10.239.343.80',
+#     port = 3306,
+#     user = 'xxx',
+#     password = '123456',
+#     database = 'xxx',
+#     charset = 'utf8'
+# )
+# sqlStr = 'select * from tableName limit 5;'
+# #cursor = conn.cursor() # 返回元祖
+# cursor = conn.cursor(cursor=pymysql.cursors.DictCursor) # 返回字典
+# cursor.execute(sqlStr)
+# # data = cursor.fetchone()
+# data = cursor.fetchall()
+# print(type(data))
+# print(data)
+# cursor.close()
+# conn.close()
 
 
 if __name__ == "__main__":
-    sqlStr = 'select * from iris_data'
-    query_data(sqlStr)
+    sqlStr = 'select * from tableName limit 5;'
+    conn = get_database_connection()
+    df = pd.read_sql(sql = sqlStr,con = conn)
+    st.write(df)

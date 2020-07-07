@@ -52,11 +52,6 @@ enableCORS = false\n\
 web: sh setup.sh && streamlit run your_app.py
 ```
 
-* Create App with CLI
-```sh
-heroku create name-of-your-app
-```
-
 > Code for `requirements.txt`
 ```
 numpy==1.16.5
@@ -64,6 +59,11 @@ pandas==0.25.1
 matplotlib==3.1.1
 scikit-learn==0.21.3
 streamlit==0.62.1
+```
+
+* Create App with CLI
+```sh
+heroku create name-of-your-app
 ```
 
 * Commit and Push Your Code to Github

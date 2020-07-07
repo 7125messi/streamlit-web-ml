@@ -6,18 +6,18 @@ https://streamlit-web-ml.herokuapp.com/
 
 ## 怎样在Heroku发布Streamlit Apps
 
-* 1. Create An Account Heroku by signing up.
-* 2. Install Heroku CLI
-* 3. Create Your Github Repository for your app
-* 4. Build your app
-* 5. Login to Heroku From the CLI
+* Create An Account Heroku by signing up.
+* Install Heroku CLI
+* Create Your Github Repository for your app
+* Build your app
+* Login to Heroku From the CLI
 
 ```sh 
 heroku Login
 ```
 
-* 6. Create Your 3 Required Files(setup.sh,Procfile,requirements.txt)
-  * (1) Code for setup.sh
+* Create Your 3 Required Files(setup.sh,Procfile,requirements.txt)
+> (1) Code for setup.sh
 ```sh
 mkdir -p ~/.streamlit/
 
@@ -34,7 +34,7 @@ port = $PORT\n\
 " > ~/.streamlit/config.toml
 ```
 
-  * (2) Code for setup.sh (Alternate with no credentials.toml)
+> Code for setup.sh (Alternate with no credentials.toml)
 ```sh
 mkdir -p ~/.streamlit/
 
@@ -47,24 +47,24 @@ enableCORS = false\n\
 " > ~/.streamlit/config.toml
 ```
 
-  * (3) Code For Procfile
+> Code For Procfile
 ```sh
 web: sh setup.sh && streamlit run your_app.py
 ```
 
-* 7. Create App with CLI
+* Create App with CLI
 ```sh
 heroku create name-of-your-app
 ```
 
-* 8. Commit and Push Your Code to Github
+* Commit and Push Your Code to Github
 ```sh
 git add your app 
 git commit -m "your comment description"
 git push
 ```
 
-* 9. Push To Heroku to Deploy
+* Push To Heroku to Deploy
 ```sh
 git push heroku master
 ```

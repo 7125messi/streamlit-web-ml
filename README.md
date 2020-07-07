@@ -16,8 +16,8 @@ https://streamlit-web-ml.herokuapp.com/
 heroku Login
 ```
 
-* Create Your 3 Required Files(setup.sh,Procfile,requirements.txt)
-> (1) Code for setup.sh
+* Create Your 3 Required Files(`setup.sh`,`Procfile`,`requirements.txt`)
+> Code for `setup.sh`
 ```sh
 mkdir -p ~/.streamlit/
 
@@ -34,7 +34,7 @@ port = $PORT\n\
 " > ~/.streamlit/config.toml
 ```
 
-> Code for setup.sh (Alternate with no credentials.toml)
+> Code for `setup.sh` (Alternate with no credentials.toml)
 ```sh
 mkdir -p ~/.streamlit/
 
@@ -47,7 +47,7 @@ enableCORS = false\n\
 " > ~/.streamlit/config.toml
 ```
 
-> Code For Procfile
+> Code For `Procfile`
 ```sh
 web: sh setup.sh && streamlit run your_app.py
 ```
